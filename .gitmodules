@@ -1,0 +1,3 @@
+[submodule "skyelib"]
+	path = skyelib
+	url = git@codeberg.org:biribiri/skyelib.git
