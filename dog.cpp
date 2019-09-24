@@ -4,14 +4,15 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iterator>
 using namespace std;
 skyelib_h::toolkit toolkit;
 //Dog methods
 void dog::bark(){
-cout << barkSound << endl;
+	cout << barkSound << endl;
 }
 bool dog::setBark(string inpt){
-barkSound = inpt;
+	barkSound = inpt;
 }
 string dog::getBreed(){
 	return breed;
@@ -81,6 +82,17 @@ void console::look(string nameInpt){
 		cout << "No such dog exists!" << endl;
 	}
 }
+
+// Event Methods
+event::generateEvent(map<string, dog*> allDogs){
+	iterator currentDog = allDogs.begin(); // Create an iterator at the beginning of allDogs
+	for (int i = 0; i < getRand(1,3); i++){	// Get a random number of dogs
+		advance(currentDog, getRand(0,allDogs.size()-1)); // Get random dog from allDogs
+		participants.append(currentDog);
+
+	}
+
+
 
 //Main
 int main(){
