@@ -32,3 +32,8 @@
 *.out
 *.app
 
+# KDevelop Files
+*.kdev4
+
+# VS Code files
+.vscode
