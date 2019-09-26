@@ -23,6 +23,12 @@ dog::dog(string inpt){
 	breed = breeds[toolkit.getRand(0,breeds.size()-1)];
 	actions = {"barking","running"};
 }
+void dog::setBusy(bool status){
+	busy = status;
+}
+bool dog::getBusy(){
+	return busy;
+}
 
 //Command Methods
 command::command(string nameInpt, string explanationInpt, string matchInpt){
@@ -84,15 +90,22 @@ void console::look(string nameInpt){
 }
 
 // Event Methods
-event::generateEvent(map<string, dog*> allDogs){
-	iterator currentDog = allDogs.begin(); // Create an iterator at the beginning of allDogs
-	for (int i = 0; i < getRand(1,3); i++){	// Get a random number of dogs
-		advance(currentDog, getRand(0,allDogs.size()-1)); // Get random dog from allDogs
-		participants.append(currentDog);
-
+event::event(map<string, dog*> allDogs){
+	map<string, dog*>::iterator currentDog = allDogs.begin(); // Create an iterator at the beginning of allDogs
+	int maxSize = allDogs.size();
+	if (maxSize > 3){
+		maxSize = 3;
+	}
+	for (int i = 0; i < toolkit.getRand(1,maxSize); i++){	// Get a random number of dogs
+		do{
+			currentDog = allDogs.begin();
+			advance(currentDog, toolkit.getRand(0,allDogs.size()-1)); // Get random dog from allDogs
+		}
+		while (!currentDog->second->getBusy());
+		participants.push_back(currentDog->second);
 	}
 
-
+}
 
 //Main
 int main(){

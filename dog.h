@@ -15,6 +15,8 @@ class dog{
 		void setRandBreed();
 		std::string getAction();
 		int getActionNumber();
+		bool getBusy();
+		void setBusy(bool status);
 	private:
 		std::string barkSound;
 		std::string name;
@@ -23,16 +25,17 @@ class dog{
 		std::vector<std::string> actions;
 		std::string action;
 		int actionNumber;
-
+		bool busy;
 };
+
 class event{
 	public:
 		std::vector<dog> getParticipants();
 		std::string getDescription();
-		void generateEvent();
+		event(std::map<std::string, dog*> allDogs);
 	private:
-		std::vector<dog> participants;
 		std::string description;
+		std::vector<dog*> participants;
 };
 class command{
 	public:
