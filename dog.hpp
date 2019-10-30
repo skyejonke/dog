@@ -5,18 +5,21 @@
 #include <vector>
 #include <map>
 
+class event;
 
 class dog{
 	public:
 		dog(std::string inpt);
 		void bark();
-		bool setBark(std::string inpt);
+		void setBark(std::string inpt);
 		std::string getBreed();
 		void setRandBreed();
 		std::string getAction();
+		void setAction(event eventIn);
 		int getActionNumber();
 		bool getBusy();
 		void setBusy(bool status);
+		std::string getName();
 	private:
 		std::string barkSound;
 		std::string name;
@@ -29,14 +32,18 @@ class dog{
 };
 
 class event{
-	public:
-		std::vector<dog> getParticipants();
-		std::string getDescription();
-		event(std::map<std::string, dog*> allDogs);
 	private:
 		std::string description;
+		std::vector<std::string> descriptions[2];
 		std::vector<dog*> participants;
+		void initDescriptions();
+	public:
+		std::vector<dog*> getParticipants();
+		std::string getDescription();
+		event(std::vector<dog*> participants);
+
 };
+
 class command{
 	public:
 		command(std::string nameInpt, std::string explanationInpt, std::string matchInpt);
@@ -60,10 +67,11 @@ class console{
 		void look(std::string nameInpt);
 		void get(std::string nameInpt);
 		command getCommand(int inpt);
-		
-		
+		void makeEvent(std::map<std::string, dog*> allDogs);
 
-		
+
+
+
 };
 
 #endif
