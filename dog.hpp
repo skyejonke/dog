@@ -14,19 +14,20 @@ class dog{
 		void setBark(std::string inpt);
 		std::string getBreed();
 		void setRandBreed();
-		std::string getAction();
-		void setAction(event eventIn);
+		event* getAction();
+		void setAction(event* eventIn);
 		int getActionNumber();
 		bool getBusy();
 		void setBusy(bool status);
 		std::string getName();
+		void startEvent(std::map<std::string, dog*> allDogs);
 	private:
 		std::string barkSound;
 		std::string name;
 		std::string breed;
 		std::vector<std::string> breeds;
 		std::vector<std::string> actions;
-		std::string action;
+		event* action;
 		int actionNumber;
 		bool busy;
 };
@@ -34,9 +35,9 @@ class dog{
 class event{
 	private:
 		std::string description;
-		std::vector<std::string> descriptions[2];
+		std::vector<std::string> descriptions;
 		std::vector<dog*> participants;
-		void initDescriptions();
+		std::vector<std::string> initDescriptions(int s);
 	public:
 		std::vector<dog*> getParticipants();
 		std::string getDescription();
@@ -68,6 +69,7 @@ class console{
 		void get(std::string nameInpt);
 		command getCommand(int inpt);
 		void makeEvent(std::map<std::string, dog*> allDogs);
+		void tick();
 
 
 
