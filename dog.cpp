@@ -11,6 +11,7 @@ using namespace std;
 
 skyelib_h::toolkit toolkit;
 
+
 //Dog methods
 void dog::bark(){
 	cout << barkSound << endl;
@@ -36,30 +37,38 @@ string dog::getName(){
 	return name;
 }
 void dog::setAction(event* eventIn){
-	busy = true;
+//	busy = true;
 	action = eventIn;
 }
 void dog::startEvent(map<string, dog*> allDogs){
 	map<string, dog*>::iterator currentDog = allDogs.begin(); // Create an iterator at the beginning of allDogs
 	vector<dog*> participants;
 	int maxSize = allDogs.size();
-	if (maxSize > 3){
-		maxSize = 3;
+	currentDog = allDogs.begin();
+	int nonbusy = 0;
+	for (int i = 0; i < maxSize; i++){
+		if (!currentDog->second->getBusy()){
+			nonbusy++;
+		}
+		advance(currentDog,1);
 	}
-	int random = toolkit.getRand(1,maxSize);
+	if (nonbusy > 3){
+		nonbusy = 3;
+	}
+	int random = toolkit.getRand(1,nonbusy);
 	for (int i = 0; i < random; i++){	// Get a random number of dogs
-
 		do{
 			currentDog = allDogs.begin();
 			advance(currentDog, toolkit.getRand(0,allDogs.size()-1)); // Get random dog from allDogs
-			cout << currentDog->second->getName() << endl;
 		}
 		while (currentDog->second->getBusy()); // Second gives you the "second" value in the map
 		currentDog->second->setBusy(true);
-		wait 10;
 		participants.push_back(currentDog->second);
 	}
-	action = new event(participants);
+	event* even = new event(participants);
+	for (dog* puppy : participants){
+		puppy->setAction(even);
+	}
 	busy = true;
 }
 
@@ -124,6 +133,7 @@ void console::get(string nameInpt){
 	dogs[nameInpt] = new dog(nameInpt);
 	cout << "Got dog " << nameInpt << "!" << endl;
 	cout << "It is a " << dogs[nameInpt]->getBreed() << "." << endl;
+	tick();
 }
 void console::look(string nameInpt){
 	cout << "Looking at " << nameInpt << "." << endl;
@@ -135,22 +145,7 @@ void console::look(string nameInpt){
 		cout << "No such dog exists!" << endl;
 	}
 }
-void console::makeEvent(map<string, dog*> allDogs){
-	map<string, dog*>::iterator currentDog = allDogs.begin(); // Create an iterator at the beginning of allDogs
-	vector<dog*> participants;
-	int maxSize = allDogs.size();
-	if (maxSize > 3){
-		maxSize = 3;
-	}
-	for (int i = 0; i < toolkit.getRand(1,maxSize); i++){	// Get a random number of dogs
-		do{
-			currentDog = allDogs.begin();
-			advance(currentDog, toolkit.getRand(0,allDogs.size()-1)); // Get random dog from allDogs
-		}
-		while (!currentDog->second->getBusy()); // Second gives you the "second" value in the map
-		participants.push_back(currentDog->second);
-	}
-}
+
 void console::tick(){
 	map<string, dog*>::iterator currentDog = dogs.begin();
 	for (int i = 0; i < dogs.size();i++){
@@ -172,12 +167,19 @@ vector<string> event::initDescriptions(int s){
 	vector<string> ldescriptions;
 	if (s == 0){
 		ldescriptions.push_back("<dog1> is frolicking in the garden.");
+		ldescriptions.push_back("<dog1> is chasing it's tail.");
+		ldescriptions.push_back("<dog1> is barking.");
+		ldescriptions.push_back("<dog1> is on your lap.");
 	}
 	else if (s == 1){
 		ldescriptions.push_back("<dog1> is frolicking in the garden with <dog2>.");
+		ldescriptions.push_back("<dog1> and <dog2> are barking at each other.");
+		ldescriptions.push_back("<dog1> is chasing <dog2>'s tail.");
 	}
 	else if (s == 2){
-	//	ldescriptions[0].push_back("<dog1>, <dog2>, and <dog> are frolicking in the graden.");
+		ldescriptions.push_back("<dog1>, <dog2>, and <dog3> are frolicking in the graden.");
+		ldescriptions.push_back("<dog1>, <dog2>, and <dog3> are all barking at each other.");
+		ldescriptions.push_back("<dog1> and <dog2> and pplaying with a ball while <dog3> looks sad.");
 	}
 	return ldescriptions;
 }
@@ -186,7 +188,7 @@ event::event(vector<dog*> participantsIn){
 	int s = participants.size()-1;
 	string replacements[3] =  {"<dog1>","<dog2>","<dog3>"};
 	descriptions = initDescriptions(s);
-	description = descriptions[0];//toolkit.getRand(0,descriptions.size())];
+	description = descriptions[toolkit.getRand(0,descriptions.size()-1)];
 	for (int i = 0; i <= s; i++){
 		toolkit.replace(description,replacements[i],participants[i]->getName());
 	}
@@ -195,35 +197,49 @@ event::event(vector<dog*> participantsIn){
 	}
 }
 
+
 string event::getDescription(){
 	return description;
 }
 
 //Main
-int main(){
+int main(int argc, char* argv[]){
 	//Initialization
 	console terminal;
 	command help = command("Help","List commands", "help");
-	command ask = command("Ask", "Request an action from a dog", "ask <dog> <action>");
+	command ask = command("Ask", "Request an action from a dog", "(ask|tell) <dog> <action>");
 	command get = command("Get", "Aquire a new dog", "get <name>");
+	command tick = command("Tick", "Go forward in time", "tick");
 	terminal.addCommand(help);
 	terminal.addCommand(ask);
 	terminal.addCommand(get);
-	terminal.interpretor("get Toby");
-	terminal.interpretor("get Bob");
-	terminal.interpretor("tick");
-	terminal.interpretor("look Toby");
+	terminal.addCommand(tick);
+	bool test = false;
+	try{
+		if (string(argv[1])=="test"){
+			test = true;
 
-/*
-	while (1 == 1){
-		cout << ">";
-		string cmd;
-		getline(cin,cmd);
-		if (cmd == "done"){
-			cout << "Have a good day!" << endl;
-			return 0;
 		}
-		terminal.interpretor(cmd);
 	}
-	*/
+	catch(logic_error e){}
+	if (test){
+		terminal.interpretor("get Toby");
+		terminal.interpretor("get Bob");
+		terminal.interpretor("get Sam");
+		terminal.interpretor("tick");
+		terminal.interpretor("look Toby");
+	}
+	else{
+
+		while (1 == 1){
+			cout << ">";
+			string cmd;
+			getline(cin,cmd);
+			if (cmd == "done"){
+				cout << "Have a good day!" << endl;
+				return 0;
+			}
+			terminal.interpretor(cmd);
+		}
+	}
 }

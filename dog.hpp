@@ -68,7 +68,6 @@ class console{
 		void look(std::string nameInpt);
 		void get(std::string nameInpt);
 		command getCommand(int inpt);
-		void makeEvent(std::map<std::string, dog*> allDogs);
 		void tick();
 
 
