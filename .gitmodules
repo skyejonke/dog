@@ -2,3 +2,6 @@
 	path = skyelib
 	url = git@codeberg.org:biribiri/skyelib.git
 	branch = master
+[submodule "timercpp"]
+	path = timercpp
+	url = https://github.com/99xt/timercpp.git
