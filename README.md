@@ -1,3 +1,3 @@
 # Dog
 
-An app to play with virtual dogs in the command line. 
+A program that lets you play with dogs on the command line!
