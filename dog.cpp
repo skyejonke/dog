@@ -40,13 +40,13 @@ void dog::setAction(event* eventIn){
 //	busy = true;
 	action = eventIn;
 }
-void dog::startEvent(map<string, dog*> allDogs){
+void dog::startEvent(map<string, dog*> allDogs){ //For beginning events
 	map<string, dog*>::iterator currentDog = allDogs.begin(); // Create an iterator at the beginning of allDogs
 	vector<dog*> participants;
 	int maxSize = allDogs.size();
 	currentDog = allDogs.begin();
 	int nonbusy = 0;
-	for (int i = 0; i < maxSize; i++){
+	for (int i = 0; i < maxSize; i++){ //Get the number of dogs that aren't busy
 		if (!currentDog->second->getBusy()){
 			nonbusy++;
 		}
@@ -170,6 +170,13 @@ vector<string> event::initDescriptions(int s){
 		ldescriptions.push_back("<dog1> is chasing it's tail.");
 		ldescriptions.push_back("<dog1> is barking.");
 		ldescriptions.push_back("<dog1> is on your lap.");
+		ldescriptions.push_back("<dog1> is wagging it's tail.");
+		ldescriptions.push_back("<dog1> is licking it's balls.");
+		ldescriptions.push_back("<dog1> is knocking over a wine glass with it's tail, spilling wine all over the floor.");
+		ldescriptions.push_back("<dog1> is eating some dog food.");
+		ldescriptions.push_back("<dog1> is eating your sandwich.");
+		ldescriptions.push_back("<dog1> is swimming in the pool");
+		ldescriptions.push_back("<dog1> is swimming in the pool");
 	}
 	else if (s == 1){
 		ldescriptions.push_back("<dog1> is frolicking in the garden with <dog2>.");
@@ -207,12 +214,14 @@ int main(int argc, char* argv[]){
 	//Initialization
 	console terminal;
 	command help = command("Help","List commands", "help");
+	command look = command("Look","Check on a dog", "look <dog>");
 	command ask = command("Ask", "Request an action from a dog", "(ask|tell) <dog> <action>");
 	command get = command("Get", "Aquire a new dog", "get <name>");
 	command tick = command("Tick", "Go forward in time", "tick");
 	terminal.addCommand(help);
-	terminal.addCommand(ask);
 	terminal.addCommand(get);
+	terminal.addCommand(look);
+	terminal.addCommand(ask);
 	terminal.addCommand(tick);
 	bool test = false;
 	try{
