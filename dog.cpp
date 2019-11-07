@@ -71,10 +71,25 @@ void dog::startEvent(map<string, dog*> allDogs){ //For beginning events
 	}
 	busy = true;
 }
-
 event* dog::getAction(){
 	return action;
 }
+void dog::initDialog(){
+	sitDialog = vector<string>();
+	sitDialog.push_back("<dog> sits down.");
+	sitDialog.push_back("<dog> runs around for a second, then sits down.");
+	sitDialog.push_back("<dog> looks confused, but when you put your hand on their back they sit down.");
+	sitDialog.push_back("<dog> looks confused.");
+	sitDialog.push_back("<dog> proceeds to knock over a case of silverware.");
+}
+void dog::sit(){
+	initDialog();
+	int rando = toolkit.getRand(0,sitDialog.size()-1);
+	string dia = sitDialog[rando];
+	toolkit.replace(dia,"<dog>",name);
+	cout << dia << endl;
+}
+
 
 //Command Methods
 command::command(string nameInpt, string explanationInpt, string matchInpt){
@@ -114,10 +129,13 @@ void console::interpretor(string inpt){
 		else if (cmd[0] == "tick"){
 			tick();
 		}
+		else if (cmd[0] == "ask" || cmd[0] == "tell"){
+			ask(cmd[1],cmd[2]);
+		}
 	}
 }
 void console::help(){
-	for (int i = 0; i < commands.size();i++){
+	for (unsigned int i = 0; i < commands.size();i++){
 		command x = getCommand(i);
 		cout << "Name: " << x.getName();
 		cout << " | Command: " << x.getMatch() << endl;
@@ -148,16 +166,39 @@ void console::look(string nameInpt){
 
 void console::tick(){
 	map<string, dog*>::iterator currentDog = dogs.begin();
-	for (int i = 0; i < dogs.size();i++){
+	for (unsigned int i = 0; i < dogs.size();i++){
 		currentDog->second->setBusy(false);
 		advance(currentDog, 1);
 	}
 	currentDog = dogs.begin();
-	for (int i = 0; i < dogs.size();i++){
+	for (unsigned int i = 0; i < dogs.size();i++){
 		if (!currentDog->second->getBusy()){
 			currentDog->second->startEvent(dogs);
 		}
 		advance(currentDog, 1);
+	}
+}
+void console::ask(string nameInpt, string trick){
+	if (dogs.count(nameInpt) > 0){
+		if (trick == "sit"){
+			dogs[nameInpt]->sit();
+		}
+	}
+	else{
+		cout << "No such dog exists!" << endl;
+	}
+}
+
+int console::start(){
+	while (1 == 1){
+		cout << ">";
+		string cmd;
+		getline(cin,cmd);
+		if (cmd == "done"){
+			cout << "Have a good day!" << endl;
+			return 0;
+		}
+		interpretor(cmd);
 	}
 }
 
@@ -213,7 +254,7 @@ string event::getDescription(){
 int main(int argc, char* argv[]){
 	//Initialization
 	console terminal;
-	command help = command("Help","List commands", "help");
+	command help = command("Help", "List commands", "help");
 	command look = command("Look","Check on a dog", "look <dog>");
 	command ask = command("Ask", "Request an action from a dog", "(ask|tell) <dog> <action>");
 	command get = command("Get", "Aquire a new dog", "get <name>");
@@ -224,31 +265,25 @@ int main(int argc, char* argv[]){
 	terminal.addCommand(ask);
 	terminal.addCommand(tick);
 	bool test = false;
-	try{
-		if (string(argv[1])=="test"){
-			test = true;
-
-		}
-	}
-	catch(logic_error e){}
-	if (test){
-		terminal.interpretor("get Toby");
-		terminal.interpretor("get Bob");
-		terminal.interpretor("get Sam");
-		terminal.interpretor("tick");
-		terminal.interpretor("look Toby");
-	}
-	else{
-
-		while (1 == 1){
-			cout << ">";
-			string cmd;
-			getline(cin,cmd);
-			if (cmd == "done"){
-				cout << "Have a good day!" << endl;
-				return 0;
+	if (argc >= 1){
+		try{
+			if (string(argv[1])=="test"){
+				test = true;
 			}
-			terminal.interpretor(cmd);
+		}
+		catch(logic_error e){}
+		if (test){
+			terminal.interpretor("get Toby");
+			terminal.interpretor("get Bob");
+			terminal.interpretor("get Sam");
+			terminal.interpretor("tick");
+			terminal.interpretor("look Toby");
+			for (int i = 0; i < 50; i++){
+				terminal.interpretor("ask Toby sit");
+			}
+			return 0;
 		}
 	}
+	return terminal.start();
+
 }
