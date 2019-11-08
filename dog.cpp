@@ -27,11 +27,18 @@ dog::dog(string inpt){
 	breeds = {"Pug","German Sheperd", "Pitbull", "Corgie", "Shiba Inu", "Shih Tzu", "Beagle", "Chow Chow", "Husky", "Foxhound", "Labrador Retreiver", "Golden Retriever", "Poodle", "Labradoodle", "Lorkshier Terrier", "Chihuahua", "Mutt", "Pekingese", "Great Dane", "Pointer", "Nova Scotia Duck Tolling Retreiver", "French Bulldog", "English Bulldog", "Australian Shepard", "Collie", "Dalmation", "Cockerspaniel", "King Charles Spaniel", "Dachsuchund", "Saint Bernard", "Portugese Water Dog", "Greyhound", "Bichon Frise", "Papillion", "Maltese", "Cane Corso", "Rottwieler"};
 	breed = breeds[toolkit.getRand(0,breeds.size()-1)];
 }
+dog::dog(){
+	breeds = {"Pug","German Sheperd", "Pitbull", "Corgie", "Shiba Inu", "Shih Tzu", "Beagle", "Chow Chow", "Husky", "Foxhound", "Labrador Retreiver", "Golden Retriever", "Poodle", "Labradoodle", "Lorkshier Terrier", "Chihuahua", "Mutt", "Pekingese", "Great Dane", "Pointer", "Nova Scotia Duck Tolling Retreiver", "French Bulldog", "English Bulldog", "Australian Shepard", "Collie", "Dalmation", "Cockerspaniel", "King Charles Spaniel", "Dachsuchund", "Saint Bernard", "Portugese Water Dog", "Greyhound", "Bichon Frise", "Papillion", "Maltese", "Cane Corso", "Rottwieler"};
+	breed = breeds[toolkit.getRand(0,breeds.size()-1)];
+}
 void dog::setBusy(bool status){
 	busy = status;
 }
 bool dog::getBusy(){
 	return busy;
+}
+void dog::setName(string nameIn){
+	name = nameIn;
 }
 string dog::getName(){
 	return name;
@@ -121,7 +128,12 @@ void console::interpretor(string inpt){
 			help();
 		}
 		else if (cmd[0] == "get"){
-			get(cmd[1]);
+			try{
+				get(cmd[1]);
+			}
+			catch(logic_error){
+				get("");
+			}
 		}
 		else if (cmd[0] == "look"){
 			look(cmd[1]);
@@ -144,13 +156,28 @@ void console::help(){
 	}
 }
 void console::get(string nameInpt){
-	while (nameInpt == "all"){
-		cout << "That's a silly name for a dog! Choose a different one: ";
-		cin >> nameInpt;
+	string newInpt = nameInpt;
+	dog* doggie;
+	if (newInpt == ""){
+		doggie = new dog();
+		cout << "Their breed is " << doggie->getBreed() << endl;
+		cout << "What do you want to call it?" << endl;
+		cin>>newInpt;
+		cin.ignore(256, '\n');
 	}
-	dogs[nameInpt] = new dog(nameInpt);
-	cout << "Got dog " << nameInpt << "!" << endl;
-	cout << "It is a " << dogs[nameInpt]->getBreed() << "." << endl;
+	else{
+		doggie = new dog(newInpt);
+	}
+	while (newInpt == "all"){
+		cout << "That's a silly name for a dog! Choose a different one: ";
+		cin >> newInpt;
+		cin.ignore(256, '\n');
+	}
+	doggie->setName(newInpt);
+	dogs[newInpt] = doggie;
+
+	cout << "Got dog " << newInpt << "!" << endl;
+	cout << "It is a " << dogs[newInpt]->getBreed() << "." << endl;
 	tick();
 }
 void console::look(string nameInpt){
@@ -257,7 +284,7 @@ int main(int argc, char* argv[]){
 	command help = command("Help", "List commands", "help");
 	command look = command("Look","Check on a dog", "look <dog>");
 	command ask = command("Ask", "Request an action from a dog", "(ask|tell) <dog> <action>");
-	command get = command("Get", "Aquire a new dog", "get <name>");
+	command get = command("Get", "Aquire a new dog", "get");
 	command tick = command("Tick", "Go forward in time", "tick");
 	terminal.addCommand(help);
 	terminal.addCommand(get);
@@ -276,6 +303,7 @@ int main(int argc, char* argv[]){
 			terminal.interpretor("get Toby");
 			terminal.interpretor("get Bob");
 			terminal.interpretor("get Sam");
+			terminal.interpretor("get");
 			terminal.interpretor("tick");
 			terminal.interpretor("look Toby");
 			for (int i = 0; i < 50; i++){

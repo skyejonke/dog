@@ -10,6 +10,7 @@ class event;
 class dog{
 	public:
 		dog(std::string inpt);
+		dog();
 		void bark();
 		void setBark(std::string inpt);
 		std::string getBreed();
@@ -18,6 +19,7 @@ class dog{
 		void setAction(event* eventIn);
 		bool getBusy();
 		void setBusy(bool status);
+		void setName(std::string nameIn);
 		std::string getName();
 		void startEvent(std::map<std::string, dog*> allDogs);
 		void sit();
