@@ -2,6 +2,36 @@
 
 A program that lets you play with dogs on the command line!
 
+## Compiling
+
+There are two ways to compile. One is install dependencies and make locally:
+
+```bash
+sudo apt install g++ cmake
+cmake .
+make
+```
+
+The other works if you have docker installed:
+
+```bash
+docker build -t dog .
+```
+
+## Running
+
+If installed locally:
+
+```bash
+./dog
+```
+
+If installed via docker:
+
+```bash
+docker run -it dog
+```
+
 ## Commands:
 
 |Name     |Command         |Explanation                             |
