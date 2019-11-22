@@ -1,6 +1,6 @@
 [submodule "skyelib"]
 	path = skyelib
-	url = https://codeberg.org/biribiri/skyelib.git
+	url = https://gitlab.org/BiriBiri12/skyelib.git
 	branch = master
 [submodule "timercpp"]
 	path = timercpp
