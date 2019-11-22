@@ -1,4 +1,5 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required(VERSION 3.5)
+project (dog LANGUAGES CXX VERSION 0.0.1)
 SET (CMAKE_CXX_COMPILER "/usr/bin/g++")
 include_directories ("skyelib")
 include_directories ("timercpp")
@@ -7,11 +8,15 @@ include_directories ("include")
 add_subdirectory (skyelib)
 add_subdirectory (timercpp)
 add_subdirectory (yaml-cpp)
+find_package(Catch2 REQUIRED)
+
 
 SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wpedantic")
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
-project (dog)
-add_executable(dog src/dog.cpp src/command.cpp src/event.cpp src/console.cpp src/main.cpp)
-target_link_libraries(dog skyelib timercpp yaml-cpp)
-
+add_library(dog STATIC src/dog.cpp src/command.cpp src/event.cpp src/console.cpp )
+target_link_libraries(dog skyelib timercpp yaml-cpp Catch2::Catch2)
+add_executable(run src/main.cpp)
+target_link_libraries(run dog)
+add_executable(tests test/test.cpp)
+target_link_libraries(tests dog)

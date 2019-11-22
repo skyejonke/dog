@@ -38,7 +38,7 @@ event::event(vector<dog*> participantsIn) {
     for (int i = 0; i <= s; i++) {
         toolkit2.replace(description,replacements[i],participants[i]->getName());
     }
-    for (int f = 0; f < s; f++) {
+    for (int f = 0; f < s+1; f++) {
         participants[f]->setAction(this);
     }
 }
