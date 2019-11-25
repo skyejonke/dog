@@ -9,21 +9,47 @@ RUN git clone https://github.com/catchorg/Catch2.git
 
 WORKDIR Catch2
 
-
 RUN cmake -Bbuild -H. -DBUILD_TESTING=OFF
 
 RUN cmake --build build/ --target install
 
-COPY . /usr/src/dockertest1
+WORKDIR /usr/src
 
-WORKDIR /usr/src/dockertest1
+#RUN git clone https://gitlab.com/BiriBiri12/dog.git --recursive
 
-RUN rm CMakeCache.txt
+COPY . /usr/src/dog
+
+#RUN mkdir /usr/src/dockertest1
+
+#COPY ./CMakeLists.txt /usr/src/dockertest1
+
+#COPY ./src /usr/src/dockertest1/
+
+#COPY ./include /usr/src/dockertest1/include
+
+#COPY ./test /usr/src/dockertest1/test
+
+#COPY ./timercpp /usr/src/dockertest1/timercpp
+
+#COPY ./skyelib /usr/src/dockertest1/skyelib
+
+WORKDIR dog
+
 
 RUN CXX=/usr/bin/g++
 
-RUN cmake .
+RUN mkdir -p build
 
-RUN make .
+RUN rm CMakeCache.txt
 
-CMD ["./run"]
+WORKDIR build
+
+RUN rm CMakeCache.txt
+
+RUN cmake ..
+
+RUN make
+
+CMD ["./tests"]
+
+CMD ["./dog"]

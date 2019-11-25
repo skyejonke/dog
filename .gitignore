@@ -50,3 +50,11 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 dog
+bin/
+lib/
+*.deb
+tests
+CPackConfig.cmake
+CPackSourceConfig.cmake
+_CPack_Packages/
+build

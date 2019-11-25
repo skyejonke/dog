@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
-project (dog LANGUAGES CXX VERSION 0.0.1)
-SET (CMAKE_CXX_COMPILER "/usr/bin/g++")
+project (dog LANGUAGES CXX VERSION 0.1.2)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 include_directories ("skyelib")
 include_directories ("timercpp")
 include_directories ("yaml-cpp")
@@ -14,9 +15,23 @@ find_package(Catch2 REQUIRED)
 SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wpedantic")
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
-add_library(dog STATIC src/dog.cpp src/command.cpp src/event.cpp src/console.cpp )
-target_link_libraries(dog skyelib timercpp yaml-cpp Catch2::Catch2)
-add_executable(run src/main.cpp)
-target_link_libraries(run dog)
+add_library(doglib STATIC src/dog.cpp src/command.cpp src/event.cpp src/console.cpp )
+target_link_libraries(doglib skyelib timercpp yaml-cpp Catch2::Catch2)
+add_executable(dog src/main.cpp)
+target_link_libraries(dog doglib)
 add_executable(tests test/test.cpp)
-target_link_libraries(tests dog)
+target_link_libraries(tests doglib)
+install(TARGETS dog doglib
+	RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib/static)
+
+SET(CPACK_GENERATOR "DEB")
+SET(CPACK_DEBIAN_FILE_NAME, "dog")
+SET(CPACK_DEBIAN_PACKAGE_DESCRIPTION,"The program that lets you play with dogs on the command line!")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "skyenet") #required
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+include (CPack)
+
