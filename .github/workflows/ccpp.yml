@@ -14,7 +14,7 @@ jobs:
     - name: Submodules
       run: git submodule init
     - name: catch
-      run:  git clone https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && cmake --build build/ --target install && cd ..
+      run:  git clone https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install && cd ..
     - name: configure
       run: cmake .
     - name: make tests
