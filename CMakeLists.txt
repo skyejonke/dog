@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project (dog LANGUAGES CXX VERSION 0.1.2)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+SET(CXX,"g++")
 include_directories ("skyelib")
 include_directories ("timercpp")
 include_directories ("yaml-cpp")
@@ -25,6 +26,8 @@ install(TARGETS dog doglib
 	RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib/static)
+enable_testing()
+add_test(NAME mainTest COMMAND tests)
 
 SET(CPACK_GENERATOR "DEB")
 SET(CPACK_DEBIAN_FILE_NAME, "dog")
