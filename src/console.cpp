@@ -52,16 +52,13 @@ void console::help() {
 }
 void console::get(string nameInpt) {
     string newInpt = nameInpt;
-    dog* doggie;
+    dog* doggie = new dog();
     if (newInpt == "") {
         doggie = new dog();
         cout << "Their breed is " << doggie->getBreed() << endl;
         cout << "What do you want to call it?" << endl;
         cin>>newInpt;
         cin.ignore(256, '\n');
-    }
-    else {
-        doggie = new dog(newInpt);
     }
     while (newInpt == "all") {
         cout << "That's a silly name for a dog! Choose a different one: ";
