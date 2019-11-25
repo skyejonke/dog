@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/skyejonke/dog.svg?branch=master)](https://travis-ci.com/skyejonke/dog)
 # Dog
 
 A program that lets you play with dogs on the command line!
