@@ -6,11 +6,11 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v1
     - name: Install cmake
-      run: sudo apt install cmake
+      run: sudo apt install cmake catch
     - name: configure
       run: cmake .
     - name: make tests
