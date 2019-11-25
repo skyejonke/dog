@@ -1,0 +1,19 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install cmake
+      run: sudo apt install cmake
+    - name: configure
+      run: cmake .
+    - name: make tests
+      run: make tests
+    - name: make
+      run: make
