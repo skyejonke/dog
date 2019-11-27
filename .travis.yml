@@ -1,6 +1,5 @@
 language: C++
 dist: Bionic
-sudo: require
 before_install:
   - sudo apt-get -y install cmake
 addons:
