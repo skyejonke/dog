@@ -10,14 +10,12 @@ include_directories ("include")
 add_subdirectory (skyelib)
 add_subdirectory (timercpp)
 add_subdirectory (yaml-cpp)
-find_package(Catch2 REQUIRED)
-
 
 SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wpedantic")
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 add_library(doglib STATIC src/dog.cpp src/command.cpp src/event.cpp src/console.cpp )
-target_link_libraries(doglib skyelib timercpp yaml-cpp Catch2::Catch2)
+target_link_libraries(doglib skyelib timercpp yaml-cpp)
 add_executable(dog src/main.cpp)
 target_link_libraries(dog doglib)
 add_executable(tests test/test.cpp)
