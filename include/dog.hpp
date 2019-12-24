@@ -27,15 +27,17 @@ class dog{
 		void sit();
 		void initDialog();
 	private:
+
 		std::vector<std::string> breeds = {"Pug","German Sheperd", "Pitbull",
 		"Corgie", "Shiba Inu", "Shih Tzu", "Beagle", "Chow Chow", "Husky",
 		"Foxhound", "Labrador Retreiver", "Golden Retriever", "Poodle",
-		"Labradoodle", "Lorkshier Terrier", "Chihuahua", "Mutt", "Pekingese", "Great
-		Dane", "Pointer", "Nova Scotia Duck Tolling Retreiver", "French Bulldog",
+		"Labradoodle", "Lorkshier Terrier", "Chihuahua", "Mutt", "Pekingese",
+		"Great Dane", "Pointer", "Nova Scotia Duck Tolling Retreiver", "French Bulldog",
 		"English Bulldog", "Australian Shepard", "Collie", "Dalmation",
 		"Cockerspaniel", "King Charles Spaniel", "Dachsuchund", "Saint Bernard",
 		"Portugese Water Dog", "Greyhound", "Bichon Frise", "Papillion", "Maltese",
 		"Cane Corso", "Rottwieler"}; 
+
 		std::string barkSound;
 		std::string name;
 		std::string breed;
