@@ -83,6 +83,7 @@ void console::get(string nameInpt) {
         cin.ignore(256, '\n');
     }
     doggie->setName(newInpt);
+    dogs.erase(newInpt);
     dogs[newInpt] = doggie;
 
     cout << "Got dog " << newInpt << "!" << endl;
