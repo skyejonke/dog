@@ -33,6 +33,11 @@ If installed via docker:
 docker run -it dog
 ```
 
+## Hunger
+
+Your dogs will get hungry! Make sure you feed them with the feed
+command!
+
 ## Commands:
 
 |Name     |Command         |Explanation                             |
@@ -42,9 +47,12 @@ docker run -it dog
 |Look     |look \<dogname\>|Look at the given dog.                  |
 |Tick     |tick            |Pass the time.                          |
 |Ask      |(ask\|tell) \<dogname\>\<command\>|As a dog to do something      |
+|Feed     |feed \<dogname\>|Feed a dog.|
 
 ## Ask commands:
 
 |Name	|Explanation|
 |-------|-----------|
 |sit	|Asks the dog to sit|
+|bark   |Asks the dog to bark!|
+

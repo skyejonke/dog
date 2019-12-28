@@ -13,11 +13,11 @@ jobs:
       run: sudo apt install cmake
     - name: Submodules
       run: git submodule init && git submodule update --init --recursive
-    - name: catch
-      run:  git clone https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install && cd ..
     - name: configure
       run: cmake .
-    - name: make tests
-      run: make tests
     - name: make
       run: make
+    - name: tests
+      run: make test
+    - name: Docker
+      run: docker build -t dog .

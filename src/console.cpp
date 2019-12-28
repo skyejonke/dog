@@ -1,6 +1,8 @@
 #include "console.hpp"
 using namespace std;
 
+bool capital = true;
+bool lowercase = false;
 
 skyelib_h::toolkit toolkit3;
 //Console Methods
@@ -10,11 +12,12 @@ void console::addCommand(command inpt) {
 command console::getCommand(int inpt) {
     return commands[inpt];
 }
-void console::interpretor(string inpt) {
+bool console::interpretor(string inpt) {
     if (inpt != "") {
         vector<string> cmd = toolkit3.splitString(inpt);
         if (cmd[0] == "help") {
             help();
+            return true;
         }
         else if (cmd[0] == "get") {
             try {
@@ -23,23 +26,37 @@ void console::interpretor(string inpt) {
             catch(logic_error) {
                 get("");
             }
+            return false;
         }
         else if (cmd[0] == "look") {
-            look(cmd[1]);
+            return look(cmd[1]);
         }
         else if (cmd[0] == "tick") {
             tick();
+            return true;
         }
         else if (cmd[0] == "ask" || cmd[0] == "tell") {
             if (cmd.size() < 3) {
                 cout << "Not enough arguments"
-                     << endl;
+                    << endl;
             }
             else {
                 ask(cmd[1],cmd[2]);
             }
+            return true;
+        }
+        else if (cmd[0] == "feed"){
+            if (cmd.size() < 2){
+                cout << "Not enough arguments"
+                    << endl;
+            }
+            else{
+                feed(cmd[1]);
+            }
+            return true;
         }
     }
+    return false;
 }
 void console::help() {
     for (unsigned int i = 0; i < commands.size(); i++) {
@@ -52,9 +69,9 @@ void console::help() {
 }
 void console::get(string nameInpt) {
     string newInpt = nameInpt;
-    dog* doggie = new dog();
+    dog* doggie = new dog(dogs);
     if (newInpt == "") {
-        doggie = new dog();
+        doggie = new dog(dogs);
         cout << "Their breed is " << doggie->getBreed() << endl;
         cout << "What do you want to call it?" << endl;
         cin>>newInpt;
@@ -72,7 +89,7 @@ void console::get(string nameInpt) {
     cout << "It is a " << dogs[newInpt]->getBreed() << "." << endl;
     tick();
 }
-void console::look(string nameInpt) {
+bool console::look(string nameInpt) {
     cout << "Looking at " << nameInpt << "." << endl;
     if (dogs.count(nameInpt) >0) {
         cout << "It is a " << dogs[nameInpt]->getBreed() << "!" << endl;
@@ -80,7 +97,9 @@ void console::look(string nameInpt) {
     }
     else {
         cout << "No such dog exists!" << endl;
+        return false;
     }
+    return true;
 }
 
 void console::tick() {
@@ -94,19 +113,31 @@ void console::tick() {
         if (!currentDog->second->getBusy()) {
             currentDog->second->startEvent(dogs);
         }
+        currentDog->second->hungry();
+        // For testing purposes:
+        // cout << currentDog->second->getHunger() << endl;
         advance(currentDog, 1);
     }
 }
+
 void console::ask(string nameInpt, string trick) {
     if (dogs.count(nameInpt) > 0) {
         if (trick == "sit") {
             dogs[nameInpt]->sit();
         }
-    }
-    else {
-        cout << "No such dog exists!" << endl;
+        else if (trick == "bark") {
+            cout << dogs[nameInpt]->bark(lowercase) << "!" <<  endl;
+        }
+        else {
+            cout << "No such dog exists!" << endl;
+        }
     }
 }
+
+void console::feed(string nameInpt){
+    dogs[nameInpt]->feed();
+}
+
 
 int console::start() {
     while (1 == 1) {
@@ -117,7 +148,9 @@ int console::start() {
             cout << "Have a good day!" << endl;
             return 0;
         }
-        interpretor(cmd);
+        if (interpretor(cmd)){
+            tick();
+        }
     }
 }
 
