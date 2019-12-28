@@ -15,11 +15,13 @@ int main(int argc, char* argv[]) {
     command ask = command("Ask", "Request an action from a dog", "(ask|tell) <dog> <action>");
     command get = command("Get", "Aquire a new dog", "get");
     command tick = command("Tick", "Go forward in time", "tick");
+    command feed = command("Feed", "Feed a dog!", "feed <dog>");
     terminal.addCommand(help);
     terminal.addCommand(get);
     terminal.addCommand(look);
     terminal.addCommand(ask);
     terminal.addCommand(tick);
+    terminal.addCommand(feed);
     bool test = false;
     if (argc >= 1) {
         try {

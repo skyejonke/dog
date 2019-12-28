@@ -3,10 +3,13 @@
 using namespace std;
 //Dog methods
 
+
 skyelib_h::toolkit toolkit;
 
-void dog::bark() {
-    cout << barkSound << endl;
+string dog::bark(bool capital) {
+    string capsBarkSound = barkSound;
+    capsBarkSound[0] = toupper(barkSound[0]);
+    return (capital ? barkSound : capsBarkSound);
 }
 void dog::setBark(string inpt) {
     barkSound = inpt;
@@ -14,14 +17,32 @@ void dog::setBark(string inpt) {
 string dog::getBreed() {
     return breed;
 }
+float dog::getHunger() {
+    return hunger;
+}
+dog::dog(string inpt, map<string,dog*> dogsInpt) {
+    name=inpt;
+    breed = breeds[toolkit.getRand(0,breeds.size()-1)];
+    barkSound = barks[toolkit.getRand(0,barks.size()-1)];
+    hunger = 100.0;
+    dogs = dogsInpt;
+}
 dog::dog(string inpt) {
     name=inpt;
-    breeds = {"Pug","German Sheperd", "Pitbull", "Corgie", "Shiba Inu", "Shih Tzu", "Beagle", "Chow Chow", "Husky", "Foxhound", "Labrador Retreiver", "Golden Retriever", "Poodle", "Labradoodle", "Lorkshier Terrier", "Chihuahua", "Mutt", "Pekingese", "Great Dane", "Pointer", "Nova Scotia Duck Tolling Retreiver", "French Bulldog", "English Bulldog", "Australian Shepard", "Collie", "Dalmation", "Cockerspaniel", "King Charles Spaniel", "Dachsuchund", "Saint Bernard", "Portugese Water Dog", "Greyhound", "Bichon Frise", "Papillion", "Maltese", "Cane Corso", "Rottwieler"};
     breed = breeds[toolkit.getRand(0,breeds.size()-1)];
+    barkSound = barks[toolkit.getRand(0,barks.size()-1)];
+    hunger = 100.0;
+}
+dog::dog(map<string,dog*> dogsInpt) {
+    breed = breeds[toolkit.getRand(0,breeds.size()-1)];
+    barkSound = barks[toolkit.getRand(0,barks.size()-1)];
+    hunger = 100.0;
+    dogs = dogsInpt;
 }
 dog::dog() {
-    breeds = {"Pug","German Sheperd", "Pitbull", "Corgie", "Shiba Inu", "Shih Tzu", "Beagle", "Chow Chow", "Husky", "Foxhound", "Labrador Retreiver", "Golden Retriever", "Poodle", "Labradoodle", "Lorkshier Terrier", "Chihuahua", "Mutt", "Pekingese", "Great Dane", "Pointer", "Nova Scotia Duck Tolling Retreiver", "French Bulldog", "English Bulldog", "Australian Shepard", "Collie", "Dalmation", "Cockerspaniel", "King Charles Spaniel", "Dachsuchund", "Saint Bernard", "Portugese Water Dog", "Greyhound", "Bichon Frise", "Papillion", "Maltese", "Cane Corso", "Rottwieler"};
     breed = breeds[toolkit.getRand(0,breeds.size()-1)];
+    barkSound = barks[toolkit.getRand(0,barks.size()-1)];
+    hunger = 100.0;
 }
 void dog::setBusy(bool status) {
     busy = status;
@@ -36,7 +57,7 @@ string dog::getName() {
     return name;
 }
 void dog::setAction(event* eventIn) {
-//	busy = true;
+    //	busy = true;
     action = eventIn;
 }
 void dog::startEvent(map<string, dog*> allDogs) { //For beginning events
@@ -89,4 +110,57 @@ void dog::sit() {
     cout << dia << endl;
 }
 
+void dog::hungry() {
+    float val = hungerValues[toolkit.getRand(0,hungerValues.size()-1)];
+    //float val = hungerValues[0];
+    hunger -= val;
+    if (hunger <= 0){
+        cout << name << " is completely still!";
+    }
+    else if (hunger < 10){
+        cout << name << " is lying next to it's food bowl" << endl;
+    }
+    else if (hunger < 30){
+        cout << name << " is starting to whine." << endl;
+    }
+    else if (hunger < 50){
+        cout << name << " is looking at you hopefully." << endl;
+    }
+}
+
+void dog::feed() {
+    float val;
+    if (dogs.size() != 0){
+        val = foodValues[
+            toolkit.getRand(0,foodValues.size()-1)]
+            * dogs.size();
+    }
+    else{
+        val = foodValues[
+            toolkit.getRand(0,foodValues.size()-1)];
+    }
+    if ((hunger + val ) >= 100){
+        cout << name << " eats a bit, but is disinterested." << endl;
+    }
+    hunger = ((hunger + val > 100) ? 100 : (hunger + val));
+
+    if (hunger <= 0){
+        cout << name << " eats heartily and pines for more!" << endl;
+    }
+    else if (hunger <= 30){
+        cout << name << " quickly eats the dog food looks at you hopefully" << endl;
+    }
+    else if (hunger <= 50){
+        cout << name << " takes their time with the dog food and barks a bit." << endl;
+    }
+    else if (hunger <= 80){
+        cout << name << " eats happily and looks content." << endl;
+    }
+    else if (hunger < 100 && val >= 5){
+        cout << name << " considers for a bit, and then eats the food happily." << endl;
+    }
+    else if (hunger < 100 && val < 5){
+        cout << name << " considers for a bit, and eats a small amount of food.";
+    }
+}
 

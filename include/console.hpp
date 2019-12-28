@@ -13,15 +13,16 @@ class console{
 		std::vector<command> commands;
 		std::map<std::string, dog*> dogs;
 	public:
-		void interpretor(std::string inpt);
+		bool interpretor(std::string inpt);
 		void addCommand(command inpt);
 		void help();
-		void look(std::string nameInpt);
+		bool look(std::string nameInpt);
 		void get(std::string nameInpt);
 		command getCommand(int inpt);
 		void tick();
 		int start();
 		void ask(std::string trick, std::string nameInpt);
+		void feed(std::string nameInpt);
 };
 
 #endif
