@@ -2,9 +2,3 @@
 	path = skyelib
 	url = https://github.com/skyejonke/skyelib.git
 	branch = master
-[submodule "timercpp"]
-	path = timercpp
-	url = https://github.com/99xt/timercpp.git
-[submodule "yaml-cpp"]
-	path = yaml-cpp
-	url = https://github.com/jbeder/yaml-cpp.git
