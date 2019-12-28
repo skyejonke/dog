@@ -30,9 +30,7 @@ COPY . /usr/src/dog
 #COPY ./test /usr/src/dockertest1/test
 
 #COPY ./timercpp /usr/src/dockertest1/timercpp
-
 #COPY ./skyelib /usr/src/dockertest1/skyelib
-
 WORKDIR dog
 
 
@@ -40,16 +38,12 @@ RUN CXX=/usr/bin/g++
 
 RUN mkdir -p build
 
-RUN rm CMakeCache.txt
+RUN if [ -f ./CMakeCache.txt ]; then rm CMakeCache.txt; fi
 
-WORKDIR build
-
-RUN rm CMakeCache.txt
-
-RUN cmake ..
+RUN cmake .
 
 RUN make
 
-CMD ["./tests"]
+RUN make test
 
-CMD ["./dog"]
+CMD ["./bin/dog"]
